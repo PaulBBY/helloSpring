@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>City</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"
+		defer></script>
+</head>
+
+<body class="container">
+	<div class="d-flex justify-content-end mt-3">
+		<a th:href="@{/logout}" class="btn btn-warning">Logout</a>
+
+	</div>
+	<h1 th:text="${title}">Home</h1>
+	<a th:href="@{/}">Home</a>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Departement</th>
+				<th>Population</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="town : ${towns}">
+				<td th:text="${town.townName}">Name</td>
+				<td th:text="${town.departmentCode + ' - ' + town.departmentName}">Name</td>
+				<td th:text="${town.townNbInhabitant}">00</td>
+				<td>
+					<a th:href="@{/view/town/getDetail(id=${town.townCode})}" class="btn btn-primary">View</a>
+					<a th:href="@{/view/town/deleteTown(id=${town.townCode})}" class="btn btn-danger">Delete</a>
+				</td>
+			</tr>
+		</tbody>
+	
+	</table>
+	<div class="d-flex justify-content-between mt-4">
+
+			<div>
+				<a th:if="${towns.hasPrevious()}" th:href="@{/view/town(page=${towns.number - 1}, size=${towns.size})}"
+					class="btn btn-secondary">Previous</a>
+				<a th:if="${towns.hasNext()}" th:href="@{/view/town(page=${towns.number + 1}, size=${towns.size})}"
+					class="btn btn-secondary">Next</a>
+			</div>
+		</div>
+</body>
+
+</html>

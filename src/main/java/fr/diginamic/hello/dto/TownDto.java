@@ -5,43 +5,57 @@ import jakarta.validation.constraints.Size;
 
 public class TownDto {
 
-	@Size(min = 2, message="La ville doit avoir un nom contenant au moins 2 lettres")
-	private String townNname;
-	
-	@Min(value=10, message="La ville doit avoir au moins 10 habitants")
-	private int townNbInhabitant;
-	
-	@Size(min=2, message="Le code département doit obligatoire 2 caractères")
+	@Size(min = 2, message = "La ville doit avoir un nom contenant au moins 2 lettres")
+	private String townName;
+
+	@Min(value = 10, message = "La ville doit avoir au moins 10 habitants")
+	private Long townNbInhabitants;
+
+	private Long townCode;
+
+	@Size(min = 2, message = "Le code département doit obligatoire 2 caractères")
 	private String departmentCode;
-	
+
 	private String departmentName;
 
 	public TownDto() {
 		super();
 	}
 
-	public TownDto(String townNname, int townNbInhabitant, String departmentCode, String departmentName) {
+	public TownDto(@Size(min = 2, message = "La ville doit avoir un nom contenant au moins 2 lettres") String townName,
+			@Min(value = 10, message = "La ville doit avoir au moins 10 habitants") Long townNbInhabitants, Long townCode,
+			@Size(min = 2, message = "Le code département doit obligatoire 2 caractères") String departmentCode,
+			String departmentName) {
 		super();
-		this.townNname = townNname;
-		this.townNbInhabitant = townNbInhabitant;
+		this.townName = townName;
+		this.townNbInhabitants = townNbInhabitants;
+		this.townCode = townCode;
 		this.departmentCode = departmentCode;
 		this.departmentName = departmentName;
 	}
 
 	public String getTownName() {
-		return townNname;
+		return townName;
 	}
 
-	public void setTownName(String townNname) {
-		this.townNname = townNname;
+	public void setTownName(String townName) {
+		this.townName = townName;
 	}
 
-	public int getTownNbInhabitant() {
-		return townNbInhabitant;
+	public Long getTownNbInhabitant() {
+		return townNbInhabitants;
 	}
 
-	public void setTownNbInhabitant(int nbInhabitant) {
-		this.townNbInhabitant = nbInhabitant;
+	public void setTownNbInhabitants(Long townNbInhabitants) {
+		this.townNbInhabitants = townNbInhabitants;
+	}
+
+	public long getTownCode() {
+		return townCode;
+	}
+
+	public void setTownCode(Long townCode) {
+		this.townCode = townCode;
 	}
 
 	public String getDepartmentCode() {

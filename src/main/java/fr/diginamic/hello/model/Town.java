@@ -12,7 +12,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Min;
 @Entity
 @Table(name="VILLE")
-public class TownModel {
+public class Town {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,19 +25,19 @@ public class TownModel {
 
 	@Min(value = 0, message = "There must be a number of inhabitants")
 	@Column(name = "nb_habs")
-	private int nbInhabitant;
+	private Long nbInhabitants;
 	
 	@ManyToOne
 	@JoinColumn(name="id_dept")
-	private DepartmentModel department;
+	private Department department;
 	
 
-	public TownModel() {
+	public Town() {
 	}
 
-	public TownModel(String name, int nbInhabitant) {
+	public Town(String name, Long nbInhabitants) {
 		this.name = name;
-		this.nbInhabitant = nbInhabitant;
+		this.nbInhabitants = nbInhabitants;
 	}
 
 	public String getName() {
@@ -48,23 +48,23 @@ public class TownModel {
 		this.name = name;
 	}
 
-	public int getNbInhabitant() {
-		return nbInhabitant;
+	public Long getNbInhabitants() {
+		return nbInhabitants;
 	}
 
-	public void setNbInhabitant(int nbInhabitant) {
-		this.nbInhabitant = nbInhabitant;
+	public void setNbInhabitants(Long nbInhabitant) {
+		this.nbInhabitants = nbInhabitant;
 	}
 
 	public Long getId() {
 		return id;
 	}
 
-	public DepartmentModel getDepartment() {
+	public Department getDepartment() {
 		return department;
 	}
 
-	public void setDepartment(DepartmentModel department) {
+	public void setDepartment(Department department) {
 		this.department = department;
 	}
 }

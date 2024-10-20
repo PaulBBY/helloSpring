@@ -3,19 +3,19 @@ package fr.diginamic.hello.dao;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import fr.diginamic.hello.model.TownModel;
+import fr.diginamic.hello.model.Town;
 
 public interface TownDao {
 
-	Page<TownModel> getTowns(Pageable page);
+	Page<Town> getTowns(Pageable page);
 	
-	TownModel getTownById(Long id);
+	Town getTownById(Long townId);
 
-	Page<TownModel> getTownByName(String name, Pageable page);
+	Page<Town> getTownByName(String townName, Pageable page);
 
-	TownModel createTown(TownModel town);
+	Town createTown(Town town);
 
-	TownModel updateTownById(TownModel town, Long id);
+	Town updateTownById(Town town, Long townId);
 	
-	boolean deleteTownById(Long id);
+	boolean deleteTownById(Long townId);
 }

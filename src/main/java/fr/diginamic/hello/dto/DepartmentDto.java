@@ -11,17 +11,17 @@ public class DepartmentDto {
 	@NotNull(message="Le nom du département est obligatoire")
 	@Size(min=03, message="Le nom du département comporte au moins 3 lettres")
 	private String departmentName;
-	private int departmentPopulation;
+	private Long departmentNbInhabitants;
 
 	public DepartmentDto() {
 		super();
 	}
 
-	public DepartmentDto(String departmentCode, String departmentName, int departmentPopulation) {
+	public DepartmentDto(String departmentCode, String departmentName, Long departmentNbInhabitants) {
 		super();
 		this.departmentCode = departmentCode;
 		this.departmentName = departmentName;
-		this.departmentPopulation = departmentPopulation;
+		this.departmentNbInhabitants = departmentNbInhabitants;
 	}
 
 	public String getDepartmentCode() {
@@ -40,12 +40,12 @@ public class DepartmentDto {
 		this.departmentName = departmentName;
 	}
 
-	public int getDepartmentPopulation() {
-		return departmentPopulation;
+	public Long getDepartmentNbInhabitants() {
+		return departmentNbInhabitants;
 	}
 
-	public void setDepartmentPopulation(int departmentPopulation) {
-		this.departmentPopulation = departmentPopulation;
+	public void setDepartmentNbInhabitants(Long departmentNbInhabitants) {
+		this.departmentNbInhabitants = departmentNbInhabitants;
 	}
 
 }

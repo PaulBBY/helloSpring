@@ -20,12 +20,12 @@ public class DepartmentDaoImp implements DepartmentDao {
 
 	@Override
 	@Transactional
-	public Page<DepartmentModel> getDepartments(Pageable page) {
+	public Page<Department> getDepartments(Pageable page) {
 		try {
-			List<DepartmentModel> departments = em.createQuery("select t from DepartmentModel t", DepartmentModel.class)
+			List<Department> departments = em.createQuery("select t from Department t", Department.class)
 					.setFirstResult((int) page.getOffset()).setMaxResults(page.getPageSize()).getResultList();
 
-			long nbDepartments = em.createQuery("select count(t) from DepartmentModel t", Long.class).getSingleResult();
+			long nbDepartments = em.createQuery("select count(t) from Department t", Long.class).getSingleResult();
 			return new PageImpl<>(departments, page, (int) nbDepartments);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -34,11 +34,25 @@ public class DepartmentDaoImp implements DepartmentDao {
 
 	}
 
+	@Transactional
+	public List<Department> getDepartments() {
+		try {
+			List<Department> departments = em.createQuery("select t from Department t", Department.class)
+					.getResultList();
+
+			return departments;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
 	@Override
 	@Transactional
-	public DepartmentModel getDepartmentById(Long id) {
+	public Department getDepartmentById(Long departmentId) {
 		try {
-			return em.find(DepartmentModel.class, id);
+			return em.find(Department.class, departmentId);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -49,7 +63,7 @@ public class DepartmentDaoImp implements DepartmentDao {
 
 	@Override
 	@Transactional
-	public DepartmentModel createDepartment(DepartmentModel department) {
+	public Department createDepartment(Department department) {
 		try {
 			em.persist(department);
 			return department;
@@ -63,8 +77,8 @@ public class DepartmentDaoImp implements DepartmentDao {
 
 	@Override
 	@Transactional
-	public DepartmentModel updateDepartmentById(DepartmentModel department, Long id) {
-		DepartmentModel departmentExists = getDepartmentById(id);
+	public Department updateDepartmentById(Department department, Long departmentId) {
+		Department departmentExists = getDepartmentById(departmentId);
 
 		if (departmentExists == null) {
 			return null;
@@ -75,7 +89,7 @@ public class DepartmentDaoImp implements DepartmentDao {
 		if (department.getTowns() != null) {
 			departmentExists.setTowns(department.getTowns());
 		}
-		if(department.getName() != null) {
+		if (department.getName() != null) {
 			departmentExists.setName(department.getName());
 		}
 
@@ -91,8 +105,8 @@ public class DepartmentDaoImp implements DepartmentDao {
 
 	@Override
 	@Transactional
-	public boolean deleteDepartmentById(Long id) {
-		DepartmentModel departmentExists = getDepartmentById(id);
+	public boolean deleteDepartmentById(Long departmentId) {
+		Department departmentExists = getDepartmentById(departmentId);
 
 		if (departmentExists == null) {
 			return false;
@@ -107,11 +121,13 @@ public class DepartmentDaoImp implements DepartmentDao {
 	}
 
 	@Override
-	public DepartmentModel getDepartmentByCode(String code) {
+	public Department getDepartmentByCode(String departmentCode) {
 		try {
-			return em.createQuery("select t from DepartmentModel t where t.code = :p1", DepartmentModel.class)
-					.setParameter("p1", code).getSingleResult();
+			return em.createQuery("select t from Department t where t.code = :p1", Department.class)
+					.setParameter("p1", departmentCode).getSingleResult();
+
 		} catch (Exception e) {
+			// TODO: handle exception
 			e.printStackTrace();
 			return null;
 		}

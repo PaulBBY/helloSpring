@@ -7,7 +7,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import fr.diginamic.hello.model.TownModel;
+import fr.diginamic.hello.model.Town;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -20,12 +20,12 @@ public class TownDaoImp implements TownDao {
 
 	@Override
 	@Transactional
-	public Page<TownModel> getTowns(Pageable page) {
+	public Page<Town> getTowns(Pageable page) {
 		try {
-			List<TownModel> towns = em.createQuery("select t from TownModel t", TownModel.class)
-					.setFirstResult((int) page.getOffset()).setMaxResults(page.getPageSize()).getResultList();
+			List<Town> towns = em.createQuery("select t from Town t", Town.class).setFirstResult((int) page.getOffset())
+					.setMaxResults(page.getPageSize()).getResultList();
 
-			long nbTowns = em.createQuery("select count(t) from TownModel t", Long.class).getSingleResult();
+			long nbTowns = em.createQuery("select count(t) from Town t", Long.class).getSingleResult();
 			return new PageImpl<>(towns, page, (int) nbTowns);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -33,11 +33,12 @@ public class TownDaoImp implements TownDao {
 		}
 	}
 
-	@Override
 	@Transactional
-	public TownModel getTownById(Long id) {
+	public List<Town> getTowns() {
 		try {
-			return em.find(TownModel.class, id);
+			List<Town> towns = em.createQuery("select t from Town t", Town.class).getResultList();
+
+			return towns;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -46,7 +47,18 @@ public class TownDaoImp implements TownDao {
 
 	@Override
 	@Transactional
-	public TownModel createTown(TownModel town) {
+	public Town getTownById(Long townId) {
+		try {
+			return em.find(Town.class, townId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	@Transactional
+	public Town createTown(Town town) {
 		try {
 			em.persist(town);
 			return town;
@@ -58,8 +70,8 @@ public class TownDaoImp implements TownDao {
 
 	@Override
 	@Transactional
-	public TownModel updateTownById(TownModel town, Long id) {
-		TownModel townExists = getTownById(id);
+	public Town updateTownById(Town town, Long townId) {
+		Town townExists = getTownById(townId);
 
 		if (townExists == null) {
 			return null;
@@ -68,8 +80,8 @@ public class TownDaoImp implements TownDao {
 		if (town.getName() != null) {
 			townExists.setName(town.getName());
 		}
-		if (town.getNbInhabitant() != 0) {
-			townExists.setNbInhabitant(town.getNbInhabitant());
+		if (town.getNbInhabitants() != null) {
+			townExists.setNbInhabitants(town.getNbInhabitants());
 
 		}
 		if (town.getDepartment() != null) {
@@ -87,8 +99,8 @@ public class TownDaoImp implements TownDao {
 
 	@Override
 	@Transactional
-	public boolean deleteTownById(Long id) {
-		TownModel townExists = getTownById(id);
+	public boolean deleteTownById(Long townId) {
+		Town townExists = getTownById(townId);
 
 		if (townExists == null) {
 			return false;
@@ -104,16 +116,16 @@ public class TownDaoImp implements TownDao {
 	}
 
 	@Override
-	public Page<TownModel> getTownByName(String name, Pageable page) {
+	@Transactional
+	public Page<Town> getTownByName(String townName, Pageable page) {
 		try {
-			List<TownModel> town = em.createQuery("select t from TownModel t " + "where t.name = :p1", TownModel.class)
-					.setParameter("p1", name).setFirstResult((int) page.getOffset()).setMaxResults(page.getPageSize())
-					.getResultList();
+			List<Town> towns = em.createQuery("select t from Town t " + "where t.name = :p1", Town.class)
+					.setParameter("p1", townName).setFirstResult((int) page.getOffset())
+					.setMaxResults(page.getPageSize()).getResultList();
 
-			long nbTowns = em.createQuery("select count(t) from TownModel t " + "where t.name = :p1", Long.class)
-					.setParameter("p1", name)
-					.getSingleResult();
-			return new PageImpl<>(town, page, (int) nbTowns);
+			long nbTowns = em.createQuery("select count(t) from Town t " + "where t.name = :p1", Long.class)
+					.setParameter("p1", townName).getSingleResult();
+			return new PageImpl<>(towns, page, (int) nbTowns);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -121,18 +133,32 @@ public class TownDaoImp implements TownDao {
 
 	}
 
-	public Page<TownModel> getNTopTownsFromDepartment(int n, String code, Pageable page) {
+	@Transactional
+	public List<Town> getTownByName(String townName) {
 		try {
-			List<TownModel> towns = em
-					.createQuery("select t from DepartmentModel d join d.towns t " + "where d.code = :p1 "
-							+ "order by t.nbInhabitant desc", TownModel.class)
-					.setParameter("p1", code).setFirstResult((int) page.getOffset()).setMaxResults(n).getResultList();
+			List<Town> towns = em.createQuery("select t from Town t " + "where t.name = :p1", Town.class)
+					.setParameter("p1", townName)
+					.getResultList();
+
+			return towns;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	public Page<Town> getNTopTownsFromDepartment(int topN, String departmentCode, Pageable page) {
+		try {
+			List<Town> towns = em
+					.createQuery("select t from Department d join d.towns t " + "where d.code = :p1 "
+							+ "order by t.nbInhabitants desc", Town.class)
+					.setParameter("p1", departmentCode).setFirstResult((int) page.getOffset()).setMaxResults(topN)
+					.getResultList();
 
 			long nbTowns = em
-					.createQuery("select count(t) from DepartmentModel d join d.towns t "
-							+ "where d.code = :p1", Long.class)
-					.setParameter("p1", code)
-					.getSingleResult();
+					.createQuery("select count(t) from Department d join d.towns t " + "where d.code = :p1", Long.class)
+					.setParameter("p1", departmentCode).getSingleResult();
 
 			return new PageImpl<>(towns, page, (int) nbTowns);
 		} catch (Exception e) {
@@ -142,23 +168,21 @@ public class TownDaoImp implements TownDao {
 
 	}
 
-	public Page<TownModel> getTownsMinMaxFromDepartment(int min, int max, String code, Pageable page) {
+	public Page<Town> getTownsMinMaxFromDepartment(Long minInhabitants, Long maxInhabitants, String departmentCode,
+			Pageable page) {
 		try {
-			List<TownModel> towns = em
-					.createQuery(
-							"select t from DepartmentModel d " + "join d.towns t " + "where d.code = :p1 "
-									+ "and (t.nbInhabitant >= :p2) " + "and (t.nbInhabitant <= :p3)",
-							TownModel.class)
-					.setParameter("p1", code).setParameter("p2", min).setParameter("p3", max)
-					.setFirstResult((int) page.getOffset()).setMaxResults(page.getPageSize()).getResultList();
+			List<Town> towns = em
+					.createQuery("select t from Department d " + "join d.towns t " + "where d.code = :p1 "
+							+ "and (t.nbInhabitants >= :p2) " + "and (t.nbInhabitants <= :p3)", Town.class)
+					.setParameter("p1", departmentCode).setParameter("p2", minInhabitants)
+					.setParameter("p3", maxInhabitants).setFirstResult((int) page.getOffset())
+					.setMaxResults(page.getPageSize()).getResultList();
 
 			long nbTowns = em
-					.createQuery(
-							"select count(t) from DepartmentModel d join d.towns t " + "where d.code = :p1 "
-									+ "and (t.nbInhabitant >= :p2) " + "and (t.nbInhabitant <= :p3)",
-							Long.class)
-					.setParameter("p1", code).setParameter("p2", min).setParameter("p3", max)
-					.getSingleResult();
+					.createQuery("select count(t) from Department d join d.towns t " + "where d.code = :p1 "
+							+ "and (t.nbInhabitants >= :p2) " + "and (t.nbInhabitants <= :p3)", Long.class)
+					.setParameter("p1", departmentCode).setParameter("p2", minInhabitants)
+					.setParameter("p3", maxInhabitants).getSingleResult();
 
 			return new PageImpl<>(towns, page, (int) nbTowns);
 		} catch (Exception e) {

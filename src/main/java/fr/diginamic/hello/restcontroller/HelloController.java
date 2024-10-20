@@ -1,4 +1,4 @@
-package fr.diginamic.hello.controleurs;
+package fr.diginamic.hello.restcontroller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +9,7 @@ import fr.diginamic.hello.service.HelloService;
 
 @RestController
 @RequestMapping("/hello")
-public class HelloControleur {
+public class HelloController {
 
 	@Autowired
 	HelloService helloService;

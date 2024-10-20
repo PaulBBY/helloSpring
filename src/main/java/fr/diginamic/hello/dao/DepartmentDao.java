@@ -3,19 +3,19 @@ package fr.diginamic.hello.dao;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import fr.diginamic.hello.model.DepartmentModel;
+import fr.diginamic.hello.model.Department;
 
 public interface DepartmentDao {
 
-	Page<DepartmentModel> getDepartments(Pageable page);
+	Page<Department> getDepartments(Pageable page);
 
-	DepartmentModel getDepartmentById(Long id);
+	Department getDepartmentById(Long departmentId);
 
-	DepartmentModel getDepartmentByCode(String code);
+	Department getDepartmentByCode(String codeId);
 
-	DepartmentModel createDepartment(DepartmentModel department);
+	Department createDepartment(Department departmentId);
 
-	DepartmentModel updateDepartmentById(DepartmentModel department, Long id);
+	Department updateDepartmentById(Department department, Long departmentId);
 
 	boolean deleteDepartmentById(Long id);
 }

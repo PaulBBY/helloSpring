@@ -10,17 +10,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "DEPARTEMENT")
-public class DepartmentModel {
+public class Department {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
-
+	
 	@Column(name = "code")
 	private String code;
 
@@ -28,20 +27,20 @@ public class DepartmentModel {
 	private String name;
 
 	@OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<TownModel> towns;
+	private List<Town> towns;
 
-	public DepartmentModel() {
+	public Department() {
 		super();
 	}
 
-	public DepartmentModel(String departmentcode, String name, List<TownModel> towns) {
+	public Department(String code, String name, List<Town> towns) {
 		super();
-		this.code = departmentcode;
+		this.code = code;
 		this.name = name;
 		this.towns = towns;
 	}
 
-	public DepartmentModel(String code, String name) {
+	public Department(String code, String name) {
 		super();
 		this.code = code;
 		this.name = name;
@@ -59,11 +58,11 @@ public class DepartmentModel {
 		this.code = code;
 	}
 
-	public List<TownModel> getTowns() {
+	public List<Town> getTowns() {
 		return towns;
 	}
 
-	public void setTowns(List<TownModel> towns) {
+	public void setTowns(List<Town> towns) {
 		this.towns = towns;
 	}
 
